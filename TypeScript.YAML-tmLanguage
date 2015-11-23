@@ -371,6 +371,7 @@ repository:
   expression:
     name: meta.expression.ts
     patterns:
+    - include: '#ngTemplate'
     - include: '#for-in-simple'
     - include: '#string'
     - include: '#regex'
@@ -502,6 +503,109 @@ repository:
     patterns:
     - include: '#qstring-single'
     - include: '#qstring-double'
+
+  ngTemplate:
+    name: meta.ngTemplate.ts
+    begin: (?:(?<=^|\stemplate:)|(?<=/\*\* @html \*/))\s*(`)
+    beginCaptures:
+      '1': {name: string.template.ts}
+    end: '`'
+    endCaptures:
+      '0': { name: string.template.ts}
+    patterns:
+     - include: '#ngml'
+
+  ngml:
+    name: meta.ngml.ts
+    patterns:
+     - include: '#ngTag'
+     - include: '#ngExpr'
+     - include: '#htmlComment'
+     - include: '#template-substitution-element'
+     - include: '#htmlText'
+
+  ngExpr:
+    name: meta.expression.ts
+    begin: '{{'
+    end: '}}'
+    beginCaptures:
+      '0': {name: keyword.operator.ts}
+    endCaptures:
+      '0': {name: keyword.operator.ts}
+    patterns:
+     - include: '#expression'
+
+  htmlComment:
+    name: comment.block.ts
+    begin: '<!--'
+    end: '-->'
+
+  htmlText:
+    name: string.ts
+    match: '.*?(?=({{)|(\$\{)|<|$)'
+
+  ngTag:
+    name: meta.tag.ts
+    begin: '(<)([a-zA-Z\$][a-zA-Z0-9\$\-]*)'
+    end: '(/>)|(?:(</)([a-zA-Z\$][a-zA-Z0-9\$\-]*)(>))'
+    beginCaptures:
+      '1': {name: keyword.operator.ts}
+      '2': {name: entity.name.tag.ts}
+    endCaptures:
+      '1': {name: keyword.operator.ts}
+      '2': {name: keyword.operator.ts}
+      '3': {name: entity.name.tag.ts}
+      '4': {name: keyword.operator.ts}
+    patterns:
+    - include: '#ngAttrib'
+    - include: '#ngDirective'
+    - include: '#ngBinding'
+    - include: '#ngTagEnd'
+
+  ngTagEnd:
+    name: meta.tagend.ts
+    begin: '>'
+    beginCaptures:
+      '0': {name: keyword.operator.ts}
+    end: '(?=</)'
+    patterns:
+    - include: '#ngml'
+
+  ngAttrib:
+    name: meta.attribute.ts
+    begin: '([a-zA-Z\$][a-zA-Z0-9\$\-]*)'
+    beginCaptures:
+      '1': {name: entity.name.class.ts}
+    end: "(?=[^'=])"
+    patterns:
+     - include: '#ngAttribValue'
+
+  ngAttribValue:
+    name: meta.attribute.ts
+    begin: '='
+    beginCaptures:
+      '0': {name: punctuation.separator.key-value.ts}
+    end: "(?<=')"
+    patterns:
+     - include: '#qstring-single'
+
+  ngDirective:
+    name: meta.directive-name.ts
+    begin: '\*([a-zA-Z\$][a-zA-Z0-9\$\-]*)'
+    beginCaptures:
+      '1': {name: keyword.control.ts}
+    end: "(?=[^'=])"
+    patterns:
+     - include: '#ngAttribValue'
+
+  ngBinding:
+    name: meta.binding-name.ts
+    begin: '(?:\(|\[|(?:\[\())([a-zA-Z\$][a-zA-Z0-9\$\-]*)(?:(?:\)\])|\)|\])'
+    beginCaptures:
+      '1': {name: keyword.control.ts}
+    end: "(?=[^'=])"
+    patterns:
+     - include: '#ngAttribValue'
 
   template:
     name: meta.template.ts
