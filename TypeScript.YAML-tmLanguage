@@ -542,12 +542,12 @@ repository:
 
   htmlText:
     name: string.ts
-    match: '.*?(?=({{)|(\$\{)|<|$)'
+    match: '.+?(?=({{)|(\$\{)|`|<|$)'
 
   ngTag:
     name: meta.tag.ts
     begin: '(<)([a-zA-Z\$][a-zA-Z0-9\$\-]*)'
-    end: '(/>)|(?:(</)([a-zA-Z\$][a-zA-Z0-9\$\-]*)(>))'
+    end: '(?=`)|(/>)|(?:(</)([a-zA-Z\$][a-zA-Z0-9\$\-]*)(>))'
     beginCaptures:
       '1': {name: keyword.operator.ts}
       '2': {name: entity.name.tag.ts}
@@ -567,7 +567,7 @@ repository:
     begin: '>'
     beginCaptures:
       '0': {name: keyword.operator.ts}
-    end: '(?=</)'
+    end: '(?=(</)|`)'
     patterns:
     - include: '#ngml'
 
@@ -585,7 +585,7 @@ repository:
     begin: '='
     beginCaptures:
       '0': {name: punctuation.separator.key-value.ts}
-    end: "(?<=')"
+    end: "(?<=')|(?=`)"
     patterns:
      - include: '#qstring-single'
 

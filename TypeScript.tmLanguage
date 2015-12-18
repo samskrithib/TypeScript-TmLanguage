@@ -581,7 +581,7 @@
 		<key>htmlText</key>
 		<dict>
 			<key>match</key>
-			<string>.*?(?=({{)|(\$\{)|&lt;|$)</string>
+			<string>.+?(?=({{)|(\$\{)|`|&lt;|$)</string>
 			<key>name</key>
 			<string>string.ts</string>
 		</dict>
@@ -848,7 +848,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?&lt;=')</string>
+			<string>(?&lt;=')|(?=`)</string>
 			<key>name</key>
 			<string>meta.attribute.ts</string>
 			<key>patterns</key>
@@ -957,7 +957,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(/&gt;)|(?:(&lt;/)([a-zA-Z\$][a-zA-Z0-9\$\-]*)(&gt;))</string>
+			<string>(?=`)|(/&gt;)|(?:(&lt;/)([a-zA-Z\$][a-zA-Z0-9\$\-]*)(&gt;))</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -1016,7 +1016,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=&lt;/)</string>
+			<string>(?=(&lt;/)|`)</string>
 			<key>name</key>
 			<string>meta.tagend.ts</string>
 			<key>patterns</key>
